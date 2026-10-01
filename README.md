@@ -2,13 +2,13 @@
 
 Firmware for the [Waveshare RP2040-Touch-LCD-1.28-B](https://www.waveshare.com/rp2040-touch-lcd-1.28-b.htm). It reads the onboard QMI8658 accelerometer, draws the last five minutes of the X, Y, and Z axes on the round display, and pulses an expansion-connector pin when the shock crosses a limit you can change.
 
-X is red, Y is green, Z is blue. All three share one plot. The right edge is now and the left edge is five minutes ago.
+X is red, Y is green, Z is blue. All three share one band across the middle of the round glass, where the circle is widest. The band's left and right edges follow the glass. The left side is five minutes ago and the right side is now.
 
 ## What you see
 
 The trace is dynamic acceleration in milli-g (1000 mg = 1 g), with gravity taken out. A raw plot would be dominated by the 1 g of gravity and a footstep would be a couple of pixels tall. Each 100 ms is stored as the largest swing in that slice, and each column of the graph draws the min-to-max of the slices it covers, so a footstep stays a visible spike instead of being averaged away.
 
-The dashed yellow lines are the alarm limit, above and below zero. The big number is that limit in mg. `PK` is the largest dynamic magnitude in the last two seconds, which is the reading to use when you decide where the limit should sit.
+The dashed yellow lines are the alarm limit, above and below zero. The large number under the trace is that limit in mg. Minus and plus are round keys on the left and right of the band, in the same places a tap changes the limit. A ring just inside the bezel turns red while the alarm pin is high. `PK` is the largest dynamic magnitude in the last two seconds, which is the reading to use when you decide where the limit should sit.
 
 For the first 1.5 s after power-up the screen says `SETTLING` and the alarm pin stays low while the baseline locks onto gravity.
 

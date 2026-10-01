@@ -115,14 +115,52 @@ int main(int argc, char **argv) {
     ui_draw(fb, &trace, &st);
 
     int z_pixels = 0;
+    int x_pixels = 0;
+    int y_pixels = 0;
+    int alarm_pixels = 0;
+    int leak = 0;
     uint16_t zc = UI_COLOR_Z;
-    for (int i = 0; i < UI_W * UI_H; i++) {
-        if (fb[i] == zc) {
-            z_pixels++;
+    uint16_t xc = UI_COLOR_X;
+    uint16_t yc = UI_COLOR_Y;
+    uint16_t alarm_c = UI_COLOR_ALARM;
+    uint16_t red = ui_rgb565(255, 64, 64);
+    for (int y = 0; y < UI_H; y++) {
+        for (int x = 0; x < UI_W; x++) {
+            uint16_t c = fb[y * UI_W + x];
+            int dx = x - 120;
+            int dy = y - 120;
+            if (dx * dx + dy * dy > 116 * 116) {
+                if (c != 0) {
+                    leak++;
+                }
+                continue;
+            }
+            if (c == zc) {
+                z_pixels++;
+            } else if (c == xc) {
+                x_pixels++;
+            } else if (c == yc) {
+                y_pixels++;
+            } else if (c == alarm_c) {
+                alarm_pixels++;
+            }
         }
     }
-    if (z_pixels < 400) {
-        fprintf(stderr, "Z trace is missing from the frame (%d pixels)\n", z_pixels);
+    if (leak) {
+        fprintf(stderr, "drew %d pixels outside the round glass\n", leak);
+        return 1;
+    }
+    if (z_pixels < 400 || x_pixels < 200 || y_pixels < 200) {
+        fprintf(stderr, "trace is missing from the frame (X %d Y %d Z %d)\n", x_pixels, y_pixels,
+                z_pixels);
+        return 1;
+    }
+    if (alarm_pixels < 40) {
+        fprintf(stderr, "alarm limit is missing from the frame (%d pixels)\n", alarm_pixels);
+        return 1;
+    }
+    if (fb[6 * UI_W + 120] != red && fb[7 * UI_W + 120] != red) {
+        fprintf(stderr, "alarm bezel is not drawn on the top of the glass\n");
         return 1;
     }
 
