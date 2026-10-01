@@ -49,7 +49,7 @@ cmake -S . -B build
 cmake --build build
 ```
 
-`build/accel_graph.uf2` is the file to copy to the board. Hold BOOT, tap RESET, and a `RPI-RP2` drive appears. Copy the UF2 onto it. The board reboots into the graph. It does not wait for a USB terminal, so it also runs from the battery connector.
+`build/accel_graph.uf2` is the file to copy to the board. The same firmware is checked in at `firmware/accel_graph.uf2`. Hold BOOT, tap RESET, and a `RPI-RP2` drive appears. Copy the UF2 onto it. The board reboots into the graph. It does not wait for a USB terminal, so it also runs from the battery connector.
 
 Host-side checks, including a rendered preview of the screen, do not need the Pico SDK:
 
