@@ -1,3 +1,4 @@
 build/
 *.ppm
 *.uf2
+!firmware/accel_graph.uf2
